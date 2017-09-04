@@ -161,11 +161,14 @@ def run_inference_on_image(image):
     node_lookup = NodeLookup()
 
     top_k = predictions.argsort()[-FLAGS.num_top_predictions:][::-1]
+    print("\n")
+    print("TOP 5 PREDICTIONS\n")
+    print("-----------------\n")
     for node_id in top_k:
       human_string = node_lookup.id_to_string(node_id)
       score = predictions[node_id]
       print('%s (score = %.5f)' % (human_string, score))
-
+    print("\n")
 
 def maybe_download_and_extract():
   """Download and extract model tar file."""
@@ -188,8 +191,17 @@ def maybe_download_and_extract():
 
 def main(_):
   maybe_download_and_extract()
-  image = (FLAGS.image_file if FLAGS.image_file else
-           os.path.join(FLAGS.model_dir, 'cropped_panda.jpg'))
+  if len(sys.argv) == 2:
+      image = sys.argv[1]
+      print("\n")
+      print("image file: ",image)
+      print("\n")
+  else:    
+      image = (FLAGS.image_file if FLAGS.image_file else
+           os.path.join(FLAGS.model_dir, 'Koala.jpg'))
+      print("\n")
+      print("default image file chosen: ",image)
+      print("\n")
   run_inference_on_image(image)
 
 
